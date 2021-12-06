@@ -1,5 +1,4 @@
 import 'package:census/pages/home.dart';
-import 'package:census/pages/login.dart';
 import 'package:flutter/material.dart';
 
 void main() {
