@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:census/classes/modello.dart';
 import 'package:census/classes/sondaggio.dart';
 import 'package:census/classes/utente.dart';
+import 'package:excel/excel.dart';
 import 'package:flutter/services.dart';
 
 class GestoreMemoriaLocale {
@@ -25,20 +26,20 @@ class GestoreMemoriaLocale {
     file.writeAsString(credentials);
   }
 
-  Future<List<Sondaggio>> prelevaSondaggi(Utente utente) async {
+  Future<List<Sondaggio>> prelevaSondaggi() async {
     final List<Sondaggio> sondaggi = List<Sondaggio>.empty();
     final Directory dir = Directory(_pathSondaggi);
-    dir.list(recursive: false).forEach((file) {
-      sondaggi.add(Sondaggio.fromExcel(file.path));
+    dir.list(recursive: false).forEach((file) async {
+      final excel = await _openExcel(file.path);
     });
     return sondaggi;
   }
 
-  Future<List<Sondaggio>> prelevaBozze(Utente utente) async {
+  Future<List<Sondaggio>> prelevaBozze() async {
     final List<Sondaggio> bozze = List<Sondaggio>.empty();
     final Directory dir = Directory(_pathBozze);
-    dir.list(recursive: false).forEach((file) {
-      bozze.add(Sondaggio.fromExcel(file.path));
+    dir.list(recursive: false).forEach((file) async {
+      final excel = await _openExcel(file.path);
     });
     return bozze;
   }
@@ -46,9 +47,17 @@ class GestoreMemoriaLocale {
   Future<List<Modello>> prelevaModelli() async {
     final List<Modello> modelli = List<Modello>.empty();
     final Directory dir = Directory(_pathModelli);
-    dir.list(recursive: false).forEach((file) {
-      modelli.add(Modello.fromExcel(file.path));
+    dir.list(recursive: false).forEach((file) async {
+      final excel = await _openExcel(file.path);
+      modelli.add(Modello.fromExcel(excel));
     });
     return modelli;
+  }
+
+  Future<Excel> _openExcel(String path) async {
+    ByteData data = await rootBundle.load(path);
+    var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    var excel = Excel.decodeBytes(bytes);
+    return excel;
   }
 }

@@ -15,8 +15,7 @@ class SondaggiBloc extends Bloc<SondaggiEvent, SondaggiState> {
   SondaggiBloc(this.somministratore) : super(SondaggiInitial()) {
     on<SondaggiPrelevaSondaggi>((event, emit) async {
       emit(SondaggiLoading());
-      final List<Sondaggio> sondaggi =
-          await _service.prelevaSondaggi(somministratore);
+      final List<Sondaggio> sondaggi = await _service.prelevaSondaggi();
       emit(SondaggiLoaded(sondaggi));
     });
     on<SondaggiSalvaSondaggio>((event, emit) async {

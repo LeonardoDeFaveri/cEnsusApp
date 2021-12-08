@@ -1,23 +1,41 @@
+import 'package:equatable/equatable.dart';
+import 'package:excel/excel.dart';
+
 class Modello {
   late int id;
   late List<Domanda> domande;
 
   Modello(this.id, this.domande);
 
-  Modello.fromExcel(String path) {
-    domande = List<Domanda>.empty();
+  Modello.fromExcel(Excel excel) {
+    for (var row in excel.tables[0]!.rows) {
+      List<Risposta> risposte = List<Risposta>.empty();
+      int i = 1;
+      while (row[i] != null) {
+        risposte.add(Risposta(row[i] as String));
+        i++;
+      }
+      domande.add(Domanda(row[0] as String, risposte));
+    }
+    Modello(id, domande);
   }
 }
 
-class Domanda {
-  String testo;
-  List<Risposta> risposte;
+class Domanda extends Equatable {
+  final String testo;
+  final List<Risposta> risposte;
 
-  Domanda(this.testo, this.risposte);
+  const Domanda(this.testo, this.risposte);
+
+  @override
+  List<Object?> get props => [testo];
 }
 
-class Risposta {
-  String testo;
+class Risposta extends Equatable {
+  final String testo;
 
-  Risposta(this.testo);
+  const Risposta(this.testo);
+
+  @override
+  List<Object?> get props => [testo];
 }

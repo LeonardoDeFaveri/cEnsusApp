@@ -1,6 +1,5 @@
 import 'package:census/classes/gestore_memoria_locale.dart';
 import 'package:census/classes/sondaggio.dart';
-import 'package:census/classes/utente.dart';
 import 'package:flutter/material.dart';
 
 class DraftsListPage extends StatefulWidget {
@@ -21,7 +20,7 @@ class _DrafsListPageState extends State<DraftsListPage> {
       ),
       body: Center(
         child: FutureBuilder(
-          future: _service.prelevaBozze(const Utente("", "")),
+          future: _service.prelevaBozze(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return const CircularProgressIndicator();
@@ -33,8 +32,7 @@ class _DrafsListPageState extends State<DraftsListPage> {
             return ListView.builder(
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text(
-                      "Sondaggio: ${bozze.elementAt(index).id.toString()}"),
+                  title: Text(bozze[index].modello.id.toString()),
                 );
               },
             );

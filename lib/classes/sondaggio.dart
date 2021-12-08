@@ -1,19 +1,17 @@
-import 'dart:math';
-
 import 'package:census/classes/modello.dart';
+import 'package:excel/excel.dart';
 
 class Sondaggio {
-  late int id;
   late Modello modello;
   late bool _completato;
   late bool _informativaPrivacyAccettata;
   late List<RispostaSelezionata> risposteSelezionate;
+  late DateTime dataOra;
 
-  Sondaggio(this.id, this.modello, this._completato,
-      this._informativaPrivacyAccettata, this.risposteSelezionate);
+  Sondaggio(this.modello, this._completato, this._informativaPrivacyAccettata,
+      this.risposteSelezionate);
 
   Sondaggio.newSurvey(this.modello) {
-    id = Random().nextInt(15000);
     _completato = false;
     _informativaPrivacyAccettata = false;
     for (var domanda in modello.domande) {
@@ -21,8 +19,14 @@ class Sondaggio {
     }
   }
 
-  Sondaggio.fromExcel(String path) {
-    modello = Modello.fromExcel(path);
+  Sondaggio.fromExcel(Excel excel) {
+    for (var table in excel.tables.keys) {
+      for (var row in excel.tables[table]!.rows) {
+        Domanda domanda = Domanda(row[0] as String, List<Risposta>.empty());
+        Risposta risposta = Risposta(row[1] as String);
+        seleziona(domanda, risposta);
+      }
+    }
   }
 
   void setCompletato() {
@@ -47,6 +51,10 @@ class Sondaggio {
     }
     risposteSelezionate[index].seleziona(risposta);
     return true;
+  }
+
+  void setDataOra(DateTime dataOra) {
+    this.dataOra = dataOra;
   }
 }
 
