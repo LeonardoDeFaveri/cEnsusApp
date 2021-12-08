@@ -1,20 +1,18 @@
 import 'dart:math';
 
 import 'package:census/classes/modello.dart';
-import 'package:census/classes/utente.dart';
 
 class Sondaggio {
   late int id;
-  Utente somministratore;
   late Modello modello;
   late bool _completato;
   late bool _informativaPrivacyAccettata;
   late List<RispostaSelezionata> risposteSelezionate;
 
-  Sondaggio(this.id, this.somministratore, this.modello, this._completato,
+  Sondaggio(this.id, this.modello, this._completato,
       this._informativaPrivacyAccettata, this.risposteSelezionate);
 
-  Sondaggio.newSurvey(this.somministratore, this.modello) {
+  Sondaggio.newSurvey(this.modello) {
     id = Random().nextInt(15000);
     _completato = false;
     _informativaPrivacyAccettata = false;
@@ -23,7 +21,7 @@ class Sondaggio {
     }
   }
 
-  Sondaggio.fromExcel(this.somministratore, String path) {
+  Sondaggio.fromExcel(String path) {
     modello = Modello.fromExcel(path);
   }
 

@@ -29,7 +29,7 @@ class GestoreMemoriaLocale {
     final List<Sondaggio> sondaggi = List<Sondaggio>.empty();
     final Directory dir = Directory(_pathSondaggi);
     dir.list(recursive: false).forEach((file) {
-      sondaggi.add(Sondaggio.fromExcel(utente, file.path));
+      sondaggi.add(Sondaggio.fromExcel(file.path));
     });
     return sondaggi;
   }
@@ -38,7 +38,7 @@ class GestoreMemoriaLocale {
     final List<Sondaggio> bozze = List<Sondaggio>.empty();
     final Directory dir = Directory(_pathBozze);
     dir.list(recursive: false).forEach((file) {
-      bozze.add(Sondaggio.fromExcel(utente, file.path));
+      bozze.add(Sondaggio.fromExcel(file.path));
     });
     return bozze;
   }

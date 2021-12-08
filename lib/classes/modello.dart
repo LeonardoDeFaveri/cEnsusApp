@@ -1,7 +1,8 @@
 class Modello {
+  late int id;
   late List<Domanda> domande;
 
-  Modello(this.domande);
+  Modello(this.id, this.domande);
 
   Modello.fromExcel(String path) {
     domande = List<Domanda>.empty();
