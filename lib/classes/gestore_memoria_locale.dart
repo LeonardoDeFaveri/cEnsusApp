@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 class GestoreMemoriaLocale {
   final String pathCredenziali = "data/credenziali.json";
   final String pathSondaggi = 'data/sondaggi/';
+  final String pathBozze = 'data/bozze/';
 
   Future<Utente> prelevaCredenziali() async {
     final String credentials = await rootBundle.loadString(pathCredenziali);
@@ -29,5 +30,14 @@ class GestoreMemoriaLocale {
       sondaggi.add(Sondaggio.fromExcel(utente, file.path));
     });
     return sondaggi;
+  }
+
+  Future<List<Sondaggio>> prelevaBozze(Utente utente) async {
+    final List<Sondaggio> bozze = List<Sondaggio>.empty();
+    final Directory dir = Directory(pathBozze);
+    dir.list(recursive: false).forEach((file) {
+      bozze.add(Sondaggio.fromExcel(utente, file.path));
+    });
+    return bozze;
   }
 }
