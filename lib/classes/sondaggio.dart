@@ -7,17 +7,17 @@ class Sondaggio {
   late int id;
   Utente somministratore;
   late Modello modello;
-  late bool completato;
-  late bool informativaPrivacyAccettata;
+  late bool _completato;
+  late bool _informativaPrivacyAccettata;
   late List<RispostaSelezionata> risposteSelezionate;
 
-  Sondaggio(this.id, this.somministratore, this.modello, this.completato,
-      this.informativaPrivacyAccettata, this.risposteSelezionate);
+  Sondaggio(this.id, this.somministratore, this.modello, this._completato,
+      this._informativaPrivacyAccettata, this.risposteSelezionate);
 
   Sondaggio.newSurvey(this.somministratore, this.modello) {
     id = Random().nextInt(15000);
-    completato = false;
-    informativaPrivacyAccettata = false;
+    _completato = false;
+    _informativaPrivacyAccettata = false;
     for (var domanda in modello.domande) {
       risposteSelezionate.add(RispostaSelezionata(domanda, null));
     }
@@ -28,14 +28,16 @@ class Sondaggio {
   }
 
   void setCompletato() {
-    completato = true;
+    _completato = true;
   }
 
-  bool isCompletato() => completato;
+  bool isCompletato() => _completato;
 
   void accettaInformativa() {
-    informativaPrivacyAccettata = true;
+    _informativaPrivacyAccettata = true;
   }
+
+  bool isInformativaAccettata() => _informativaPrivacyAccettata;
 
   bool seleziona(Domanda domanda, Risposta risposta) {
     int index = modello.domande.indexOf(domanda);
