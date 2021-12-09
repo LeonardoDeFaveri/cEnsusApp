@@ -22,7 +22,6 @@ class Sondaggio {
   }
 
   Sondaggio.fromExcel(Excel excel) {
-    var descrizione;
     int cont = 0;
     for (var table in excel.tables.keys) {
       for (var row in excel.tables[table]!.rows) {
@@ -35,7 +34,6 @@ class Sondaggio {
         seleziona(domanda, risposta);
       }
     }
-    this.descrizione = descrizione;
   }
 
   void setCompletato() {

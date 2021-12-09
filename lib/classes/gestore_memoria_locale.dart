@@ -31,7 +31,9 @@ class GestoreMemoriaLocale {
     final Directory dir = Directory(_pathSondaggi);
     dir.list(recursive: false).forEach((file) async {
       final excel = await _openExcel(file.path);
+      sondaggi.add(Sondaggio.fromExcel(excel));
     });
+
     return sondaggi;
   }
 
@@ -40,7 +42,9 @@ class GestoreMemoriaLocale {
     final Directory dir = Directory(_pathBozze);
     dir.list(recursive: false).forEach((file) async {
       final excel = await _openExcel(file.path);
+      bozze.add(Sondaggio.fromExcel(excel));
     });
+
     return bozze;
   }
 
