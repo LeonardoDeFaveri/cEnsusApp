@@ -22,13 +22,20 @@ class Sondaggio {
   }
 
   Sondaggio.fromExcel(Excel excel) {
+    var descrizione;
+    int cont = 0;
     for (var table in excel.tables.keys) {
       for (var row in excel.tables[table]!.rows) {
+        cont++;
+        if (cont == 1) {
+          descrizione = row[2] as String;
+        }
         Domanda domanda = Domanda(row[0] as String, List<Risposta>.empty());
         Risposta risposta = Risposta(row[1] as String);
         seleziona(domanda, risposta);
       }
     }
+    this.descrizione = descrizione;
   }
 
   void setCompletato() {
