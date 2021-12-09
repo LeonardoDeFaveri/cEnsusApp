@@ -9,17 +9,19 @@ class Modello {
   Modello(this.id, this.nome, this.domande);
 
   Modello.fromExcel(Excel excel) {
-    for (var row in excel.tables[0]!.rows) {
+    int id = excel.tables[0]!.rows[0][1] as int;
+    String nome = excel.tables[0]!.rows[0][2] as String;
+    int col = 1, row = 1;
+    while (row < excel.tables[0]!.maxRows) {
       List<Risposta> risposte = List<Risposta>.empty();
-      int i = 1;
-      while (row[i] != null) {
-        risposte.add(Risposta(row[i] as String));
-        i++;
+      while (excel.tables[0]!.rows[row][col] != null) {
+        risposte.add(Risposta(excel.tables[0]!.rows[row][col] as String));
+        col++;
       }
-      domande.add(Domanda(row[0] as String, risposte));
+      domande.add(Domanda(excel.tables[0]!.rows[row][0] as String, risposte));
+      row++;
     }
-    // Estrarre anche il nome
-    Modello(id, "", domande);
+    Modello(id, nome, domande);
   }
 }
 
