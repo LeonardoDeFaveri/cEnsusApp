@@ -1,5 +1,5 @@
 import 'package:census/pages/drafts_list.dart';
-import 'package:census/pages/new_survey.dart';
+import 'package:census/pages/models.dart';
 import 'package:flutter/material.dart';
 
 class SurveysPage extends StatelessWidget {
@@ -23,7 +23,7 @@ class SurveysPage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const SurveyPage(),
+                      builder: (context) => ModelsPage(),
                     ),
                   )
                 },

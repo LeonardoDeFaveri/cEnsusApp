@@ -1,45 +1,40 @@
 import 'package:census/classes/gestore_memoria_locale.dart';
+import 'package:census/classes/modello.dart';
 import 'package:census/classes/sondaggio.dart';
 import 'package:census/pages/new_survey.dart';
 import 'package:flutter/material.dart';
 
-class DraftsListPage extends StatefulWidget {
-  const DraftsListPage({Key? key}) : super(key: key);
+class ModelsPage extends StatelessWidget {
+  final _service = GestoreMemoriaLocale();
 
-  @override
-  State<StatefulWidget> createState() => _DrafsListPageState();
-}
-
-class _DrafsListPageState extends State<DraftsListPage> {
-  final GestoreMemoriaLocale _service = GestoreMemoriaLocale();
+  ModelsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Lista bozze"),
-      ),
+      appBar: AppBar(),
       body: Center(
         child: FutureBuilder(
-          future: _service.prelevaBozze(),
+          future: _service.prelevaModelli(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return const CircularProgressIndicator();
             }
-            List<Sondaggio> bozze = snapshot.data as List<Sondaggio>;
-            if (bozze.isEmpty) {
-              return const Text("Non hai ancora salvato nessuna bozza");
+            List<Modello> modelli = snapshot.data as List<Modello>;
+            if (modelli.isEmpty) {
+              return const Text(
+                  "Non hai ancora nessun modello tra cui scegliere");
             }
             return ListView.builder(
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text(bozze[index].descrizione),
-                  subtitle: Text(bozze[index].modello.nome),
+                  title: Text(modelli[index].nome),
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => SurveyPage(bozze[index]),
+                        builder: (context) =>
+                            SurveyPage(Sondaggio.newSurvey(modelli[index])),
                       ),
                     );
                   },

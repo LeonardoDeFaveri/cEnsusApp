@@ -1,5 +1,5 @@
 import 'package:census/pages/login.dart';
-import 'package:census/pages/surveys_page.dart';
+import 'package:census/pages/surveys.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
