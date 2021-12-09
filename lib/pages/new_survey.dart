@@ -1,8 +1,10 @@
+import 'package:census/classes/sondaggio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class SurveyPage extends StatefulWidget {
-  const SurveyPage({Key? key}) : super(key: key);
+  final Sondaggio sondaggio;
+  const SurveyPage(this.sondaggio, {Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _SurveyPageState();

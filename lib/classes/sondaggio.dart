@@ -7,9 +7,10 @@ class Sondaggio {
   late bool _informativaPrivacyAccettata;
   late List<RispostaSelezionata> risposteSelezionate;
   late DateTime dataOra;
+  late String descrizione;
 
   Sondaggio(this.modello, this._completato, this._informativaPrivacyAccettata,
-      this.risposteSelezionate);
+      this.risposteSelezionate, this.descrizione);
 
   Sondaggio.newSurvey(this.modello) {
     _completato = false;
@@ -17,6 +18,7 @@ class Sondaggio {
     for (var domanda in modello.domande) {
       risposteSelezionate.add(RispostaSelezionata(domanda, null));
     }
+    descrizione = "";
   }
 
   Sondaggio.fromExcel(Excel excel) {

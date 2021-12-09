@@ -3,9 +3,10 @@ import 'package:excel/excel.dart';
 
 class Modello {
   late int id;
+  late String nome;
   late List<Domanda> domande;
 
-  Modello(this.id, this.domande);
+  Modello(this.id, this.nome, this.domande);
 
   Modello.fromExcel(Excel excel) {
     for (var row in excel.tables[0]!.rows) {
@@ -17,7 +18,8 @@ class Modello {
       }
       domande.add(Domanda(row[0] as String, risposte));
     }
-    Modello(id, domande);
+    // Estrarre anche il nome
+    Modello(id, "", domande);
   }
 }
 
