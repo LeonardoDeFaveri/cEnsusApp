@@ -1,12 +1,10 @@
 import 'package:census/classes/sondaggio.dart';
-import 'package:census/pages/drafts_list.dart';
-import 'package:census/pages/models.dart';
 import 'package:flutter/material.dart';
 
 class SummaryPage extends StatelessWidget {
-  Sondaggio sondaggio;
+  final Sondaggio sondaggio;
 
-  SummaryPage(this.sondaggio, {Key? key}) : super(key: key);
+  const SummaryPage(this.sondaggio, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

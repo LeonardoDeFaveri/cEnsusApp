@@ -1,3 +1,4 @@
+import 'package:census/classes/util.dart';
 import 'package:equatable/equatable.dart';
 import 'package:excel/excel.dart';
 
@@ -9,19 +10,25 @@ class Modello {
   Modello(this.id, this.nome, this.domande);
 
   Modello.fromExcel(Excel excel) {
-    int id = excel.tables[0]!.rows[0][1] as int;
-    String nome = excel.tables[0]!.rows[0][2] as String;
-    int col = 1, row = 1;
-    while (row < excel.tables[0]!.maxRows) {
-      List<Risposta> risposte = List<Risposta>.empty();
-      while (excel.tables[0]!.rows[row][col] != null) {
-        risposte.add(Risposta(excel.tables[0]!.rows[row][col] as String));
-        col++;
-      }
-      domande.add(Domanda(excel.tables[0]!.rows[row][0] as String, risposte));
-      row++;
+    final Sheet? sheet = excel.tables["Sheet1"];
+    if (sheet == null) {
+      throw ExcelException();
     }
-    Modello(id, nome, domande);
+    domande = List<Domanda>.empty(growable: true);
+    final header = sheet.row(0);
+    id = (header.elementAt(1))!.value as int;
+    nome = (header.elementAt(2))!.value as String;
+
+    for (int i = 1; i < sheet.maxRows; i++) {
+      final risposte = List<Risposta>.empty(growable: true);
+      final row = sheet.row(i);
+      for (int j = 1; j < row.length; j++) {
+        final testoRisposta = (row.elementAt(j))!.value as String;
+        risposte.add(Risposta(testoRisposta));
+      }
+      final testoDomanda = (row.elementAt(0))!.value as String;
+      domande.add(Domanda(testoDomanda, risposte));
+    }
   }
 }
 
