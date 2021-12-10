@@ -12,6 +12,7 @@ class GestoreMemoriaLocale {
   final String _pathSondaggi = 'data/sondaggi/';
   final String _pathBozze = 'data/bozze/';
   final String _pathModelli = 'data/modelli/';
+  final String _pathInformativa = 'data/informativa/privacy.pdf';
 
   Future<Utente> prelevaCredenziali() async {
     final String credentials = await rootBundle.loadString(_pathCredenziali);
@@ -63,5 +64,9 @@ class GestoreMemoriaLocale {
     var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
     var excel = Excel.decodeBytes(bytes);
     return excel;
+  }
+
+  String prelevaPathInformativa() {
+    return _pathInformativa;
   }
 }

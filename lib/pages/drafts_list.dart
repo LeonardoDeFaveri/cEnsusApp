@@ -7,10 +7,10 @@ class DraftsListPage extends StatefulWidget {
   const DraftsListPage({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _DrafsListPageState();
+  State<StatefulWidget> createState() => _DraftsListPageState();
 }
 
-class _DrafsListPageState extends State<DraftsListPage> {
+class _DraftsListPageState extends State<DraftsListPage> {
   final GestoreMemoriaLocale _service = GestoreMemoriaLocale();
 
   @override
