@@ -23,9 +23,11 @@ class ModelsPage extends StatelessWidget {
             List<Modello> modelli = snapshot.data as List<Modello>;
             if (modelli.isEmpty) {
               return const Text(
-                  "Non hai ancora nessun modello tra cui scegliere");
+                "Non hai ancora nessun modello tra cui scegliere",
+              );
             }
             return ListView.builder(
+              itemCount: modelli.length,
               itemBuilder: (context, index) {
                 return ListTile(
                   title: Text(modelli[index].nome),
@@ -38,10 +40,6 @@ class ModelsPage extends StatelessWidget {
                       ),
                     );
                   },
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete_forever),
-                    onPressed: () {},
-                  ),
                 );
               },
             );

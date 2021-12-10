@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:census/classes/modello.dart';
 import 'package:census/classes/sondaggio.dart';
 import 'package:census/classes/utente.dart';
+import 'package:census/classes/util.dart';
 import 'package:excel/excel.dart';
 import 'package:flutter/services.dart';
 
@@ -28,34 +29,59 @@ class GestoreMemoriaLocale {
   }
 
   Future<List<Sondaggio>> prelevaSondaggi() async {
-    final List<Sondaggio> sondaggi = List<Sondaggio>.empty();
-    final Directory dir = Directory(_pathSondaggi);
-    dir.list(recursive: false).forEach((file) async {
-      final excel = await _openExcel(file.path);
-      sondaggi.add(Sondaggio.fromExcel(excel));
-    });
+    final List<Sondaggio> sondaggi = List<Sondaggio>.empty(growable: true);
+    final manifestJson = await rootBundle.loadString('AssetManifest.json');
+    final files = json
+        .decode(manifestJson)
+        .keys
+        .where((String key) => key.startsWith(_pathSondaggi));
+    for (String file in files) {
+      var excel = await _openExcel(file);
+      try {
+        sondaggi.add(Sondaggio.fromExcel(excel));
+      } on ExcelException {
+        stderr.writeln('Invalid excel file: $file');
+      }
+    }
 
     return sondaggi;
   }
 
   Future<List<Sondaggio>> prelevaBozze() async {
-    final List<Sondaggio> bozze = List<Sondaggio>.empty();
-    final Directory dir = Directory(_pathBozze);
-    dir.list(recursive: false).forEach((file) async {
-      final excel = await _openExcel(file.path);
-      bozze.add(Sondaggio.fromExcel(excel));
-    });
+    final List<Sondaggio> bozze = List<Sondaggio>.empty(growable: true);
+    final manifestJson = await rootBundle.loadString('AssetManifest.json');
+    final files = json
+        .decode(manifestJson)
+        .keys
+        .where((String key) => key.startsWith(_pathBozze));
+    for (String file in files) {
+      var excel = await _openExcel(file);
+      try {
+        bozze.add(Sondaggio.fromExcel(excel));
+      } on ExcelException {
+        stderr.writeln('Invalid excel file: $file');
+      }
+    }
 
     return bozze;
   }
 
   Future<List<Modello>> prelevaModelli() async {
-    final List<Modello> modelli = List<Modello>.empty();
-    final Directory dir = Directory(_pathModelli);
-    dir.list(recursive: false).forEach((file) async {
-      final excel = await _openExcel(file.path);
-      modelli.add(Modello.fromExcel(excel));
-    });
+    final List<Modello> modelli = List<Modello>.empty(growable: true);
+    final manifestJson = await rootBundle.loadString('AssetManifest.json');
+    final files = json
+        .decode(manifestJson)
+        .keys
+        .where((String key) => key.startsWith(_pathModelli));
+    for (String file in files) {
+      var excel = await _openExcel(file);
+      try {
+        modelli.add(Modello.fromExcel(excel));
+      } on ExcelException {
+        stderr.writeln('Invalid excel file: $file');
+      }
+    }
+
     return modelli;
   }
 

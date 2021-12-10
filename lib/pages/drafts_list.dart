@@ -31,6 +31,7 @@ class _DraftsListPageState extends State<DraftsListPage> {
               return const Text("Non hai ancora salvato nessuna bozza");
             }
             return ListView.builder(
+              itemCount: bozze.length,
               itemBuilder: (context, index) {
                 return ListTile(
                   title: Text(bozze[index].descrizione),

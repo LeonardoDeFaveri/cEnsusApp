@@ -15,3 +15,5 @@ String decode(String password) {
   }
   return result.toString();
 }
+
+class ExcelException implements Exception {}

@@ -1,4 +1,5 @@
 import 'package:census/classes/modello.dart';
+import 'package:census/classes/util.dart';
 import 'package:excel/excel.dart';
 
 class Sondaggio {
@@ -22,16 +23,46 @@ class Sondaggio {
   }
 
   Sondaggio.fromExcel(Excel excel) {
-    int cont = 0;
-    for (var table in excel.tables.keys) {
-      for (var row in excel.tables[table]!.rows) {
-        cont++;
-        if (cont == 1) {
-          descrizione = row[2] as String;
-        }
-        Domanda domanda = Domanda(row[0] as String, List<Risposta>.empty());
-        Risposta risposta = Risposta(row[1] as String);
-        seleziona(domanda, risposta);
+    final Sheet? sheet = excel.tables["Sheet1"];
+    if (sheet == null) {
+      throw ExcelException();
+    }
+    risposteSelezionate = List<RispostaSelezionata>.empty(growable: true);
+    // Intestazione del modello
+    final domande = List<Domanda>.empty(growable: true);
+    final header = sheet.row(0);
+    final idModello = (header.elementAt(1))!.value as int;
+    final nomeModello = (header.elementAt(2))!.value as String;
+
+    // Intestazione del sondaggio
+    descrizione = (header.elementAt(3))!.value as String;
+    dataOra = DateTime.fromMillisecondsSinceEpoch(
+        (header.elementAt(4))!.value as int);
+    _informativaPrivacyAccettata = (header.elementAt(5))!.value as bool;
+    _completato = (header.elementAt(6))!.value as bool;
+
+    // Carica tutte le domande e le risposte del modello
+    for (int i = 1; i < sheet.maxRows; i++) {
+      final risposte = List<Risposta>.empty(growable: true);
+      final row = sheet.row(i);
+      for (int j = 2; j < row.length; j++) {
+        final testoRisposta = (row.elementAt(j))!.value as String;
+        risposte.add(Risposta(testoRisposta));
+      }
+      final testoDomanda = (row.elementAt(0))!.value as String;
+      domande.add(Domanda(testoDomanda, risposte));
+    }
+    modello = Modello(idModello, nomeModello, domande);
+
+    // Carica le risposte selezionate
+    for (int i = 1; i < sheet.maxRows; i++) {
+      final row = sheet.row(i);
+      final testoRispostaSelezionata = (row.elementAt(1))?.value;
+      if (testoRispostaSelezionata == null) {
+        risposteSelezionate.add(RispostaSelezionata(domande[i - 1], null));
+      } else {
+        Risposta risposta = Risposta(testoRispostaSelezionata);
+        risposteSelezionate.add(RispostaSelezionata(domande[i - 1], risposta));
       }
     }
   }
