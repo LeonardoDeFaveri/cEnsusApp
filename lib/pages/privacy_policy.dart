@@ -1,9 +1,6 @@
-import 'dart:io';
-
 import 'package:census/classes/gestore_memoria_locale.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
-
 
 class PrivacyPolicy extends StatelessWidget {
   PrivacyPolicy({Key? key}) : super(key: key);
@@ -16,12 +13,9 @@ class PrivacyPolicy extends StatelessWidget {
       appBar: AppBar(
         title: Text(title),
       ),
-      body: Container(
-        //child: SfPdfViewer.file(File(_service.prelevaPathInformativa()))
-        child: SfPdfViewer.asset(
-              _service.prelevaPathInformativa()
-              )
-      )
+      body: Center(
+        child: SfPdfViewer.asset(_service.prelevaPathInformativa()),
+      ),
     );
   }
 }

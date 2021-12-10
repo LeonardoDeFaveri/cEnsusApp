@@ -40,7 +40,7 @@ class _DraftsListPageState extends State<DraftsListPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => SurveyPage(bozze[index]),
+                        builder: (context) => SurveyPage(bozze[index], 1),
                       ),
                     );
                   },

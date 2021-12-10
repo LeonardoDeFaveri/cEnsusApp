@@ -16,6 +16,7 @@ class Sondaggio {
   Sondaggio.newSurvey(this.modello) {
     _completato = false;
     _informativaPrivacyAccettata = false;
+    risposteSelezionate = List<RispostaSelezionata>.empty(growable: true);
     for (var domanda in modello.domande) {
       risposteSelezionate.add(RispostaSelezionata(domanda, null));
     }

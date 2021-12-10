@@ -12,7 +12,9 @@ class ModelsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text("Scelta modello"),
+      ),
       body: Center(
         child: FutureBuilder(
           future: _service.prelevaModelli(),
@@ -36,7 +38,7 @@ class ModelsPage extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) =>
-                            SurveyPage(Sondaggio.newSurvey(modelli[index])),
+                            SurveyPage(Sondaggio.newSurvey(modelli[index]), 0),
                       ),
                     );
                   },
