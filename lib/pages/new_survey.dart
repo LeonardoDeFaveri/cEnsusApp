@@ -17,7 +17,14 @@ class SurveyPage extends StatefulWidget {
 
 class _SurveyPageState extends State<SurveyPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  Risposta? _risposta;
+  late Risposta? _risposta;
+  late int _indiceDomanda;
+
+  @override
+  void initState() {
+    super.initState();
+    _indiceDomanda = widget.indiceDomanda - 1;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,127 +39,147 @@ class _SurveyPageState extends State<SurveyPage> {
   }
 
   Widget _buildPage() {
-    int indiceDomanda = widget.indiceDomanda - 1;
-
-    if (indiceDomanda == -1) {
+    _risposta = widget.sondaggio.risposteSelezionate[_indiceDomanda].risposta;
+    if (_indiceDomanda == -1) {
       return PrivacyPolicy();
-    } else {
-      Domanda domanda = widget.sondaggio.modello.domande[indiceDomanda];
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 16.0,
-              right: 16.0,
-              top: 8.0,
-              bottom: 8.0,
-            ),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: Text(
-                        domanda.testo,
-                        textAlign: TextAlign.start,
-                        textScaleFactor: 1.5,
-                      ),
-                    ),
-                  ),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: domanda.risposte.length,
-                    itemBuilder: (context, index) {
-                      return RadioListTile(
-                        title: Text(domanda.risposte[index].testo),
-                        value: domanda.risposte[index],
-                        groupValue: _risposta,
-                        onChanged: (Risposta? value) {
-                          setState(() {
-                            _risposta = value;
-                          });
-                        },
-                        selected: _risposta == domanda.risposte[index],
-                        selectedTileColor: Colors.yellow,
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
+    }
+    Domanda domanda = widget.sondaggio.modello.domande[_indiceDomanda];
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(
+            left: 16.0,
+            right: 16.0,
+            top: 8.0,
+            bottom: 8.0,
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.arrow_back_outlined),
-                      onPressed: () {
-                        //_formKey.currentState!.save();
-                      },
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: Text(
+                      domanda.testo,
+                      textAlign: TextAlign.start,
+                      textScaleFactor: 1.5,
                     ),
-                    const Text(
-                      "Domanda precedente",
-                      style: TextStyle(color: Colors.red),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  SummaryPage(widget.sondaggio),
-                            ),
-                          );
-                        },
-                        child: const Text("Riepilogo"),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.arrow_forward_outlined),
-                      onPressed: () {
-                        //_formKey.currentState!.save();
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: domanda.risposte.length,
+                  itemBuilder: (context, index) {
+                    return RadioListTile(
+                      title: Text(domanda.risposte[index].testo),
+                      value: domanda.risposte[index],
+                      groupValue: _risposta,
+                      onChanged: (Risposta? value) {
+                        setState(() {
+                          _risposta = value;
+                          widget.sondaggio.seleziona(domanda, value!);
+                          if (_isCompletato()) {
+                            widget.sondaggio.setCompletato();
+                          }
+                        });
                       },
-                    ),
-                    const Text(
-                      "Domanda successiva",
-                      style: TextStyle(color: Colors.red),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        child: const Text("Salva come bozza"),
-                      ),
-                    )
-                  ],
+                      selected: _risposta == domanda.risposte[index],
+                      selectedTileColor: Colors.yellow,
+                    );
+                  },
                 ),
               ],
             ),
           ),
-        ],
-      );
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back_outlined),
+                    onPressed: (_indiceDomanda != 0)
+                        ? () {
+                            setState(() {
+                              _indiceDomanda--;
+                            });
+                          }
+                        : null,
+                  ),
+                  const Text(
+                    "Domanda precedente",
+                    style: TextStyle(color: Colors.red),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SummaryPage(widget.sondaggio),
+                          ),
+                        );
+                      },
+                      child: const Text("Riepilogo"),
+                    ),
+                  ),
+                ],
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.arrow_forward_outlined),
+                    onPressed: (_indiceDomanda !=
+                            widget.sondaggio.risposteSelezionate.length - 1)
+                        ? () {
+                            setState(() {
+                              _indiceDomanda++;
+                            });
+                          }
+                        : null,
+                  ),
+                  const Text(
+                    "Domanda successiva",
+                    style: TextStyle(color: Colors.red),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      child: const Text("Salva come bozza"),
+                    ),
+                  )
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  bool _isCompletato() {
+    int numeroRisposteDate = 0;
+    for (var risposta in widget.sondaggio.risposteSelezionate) {
+      if (risposta.risposta != null) {
+        numeroRisposteDate++;
+      }
     }
+    return numeroRisposteDate == widget.sondaggio.risposteSelezionate.length;
   }
 }
