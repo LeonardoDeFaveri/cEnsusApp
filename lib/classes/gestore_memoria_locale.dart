@@ -92,9 +92,5 @@ class GestoreMemoriaLocale {
     return excel;
   }
 
-  File prelevaPathInformativa() {
-    //ByteData data = await rootBundle.load(_pathInformativa);
-    File pdf = File(_pathInformativa);
-    return pdf;
-  }
+  String get pathInformativa => _pathInformativa;
 }

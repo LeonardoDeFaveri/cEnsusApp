@@ -3,7 +3,7 @@ import 'package:census/classes/modello.dart';
 import 'package:census/classes/sondaggio.dart';
 import 'package:census/pages/summary.dart';
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+import 'package:pdf_render/pdf_render_widgets.dart';
 
 class SurveyPage extends StatefulWidget {
   final Sondaggio sondaggio;
@@ -182,8 +182,8 @@ class _SurveyPageState extends State<SurveyPage> {
       fit: StackFit.expand,
       alignment: AlignmentDirectional.centerStart,
       children: [
-        SafeArea(child: SfPdfViewer.file(_service.prelevaPathInformativa())),
-        /*Row(
+        PdfViewer.openAsset(_service.pathInformativa),
+        Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -193,6 +193,9 @@ class _SurveyPageState extends State<SurveyPage> {
                 setState(() {
                   if (value == true) {
                     widget.sondaggio.accettaInformativa();
+                    _policyAccettata = true;
+                  } else {
+                    _policyAccettata = false;
                   }
                 });
               },
@@ -208,7 +211,7 @@ class _SurveyPageState extends State<SurveyPage> {
                   : null,
             ),
           ],
-        )*/
+        )
       ],
     );
   }
