@@ -46,7 +46,7 @@ class Sondaggio {
     for (int i = 1; i < sheet.maxRows; i++) {
       final risposte = List<Risposta>.empty(growable: true);
       final row = sheet.row(i);
-      for (int j = 2; j < row.length; j++) {
+      for (int j = 2; j < row.length && row.elementAt(j) != null; j++) {
         final testoRisposta = (row.elementAt(j))!.value as String;
         risposte.add(Risposta(testoRisposta));
       }
