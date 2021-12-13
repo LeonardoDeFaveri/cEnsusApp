@@ -69,7 +69,6 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
       - data/credentials.json
-      - data/sondaggi/
       - data/bozze/
       - data/modelli/
       - data/informativa/
