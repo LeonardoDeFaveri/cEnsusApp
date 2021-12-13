@@ -35,8 +35,6 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  bloc: ^8.0.1
-  flutter_bloc: ^8.0.0
   excel: ^2.0.0-null-safety-3
   equatable: ^2.0.3
   syncfusion_flutter_pdfviewer: ^19.3.57-beta

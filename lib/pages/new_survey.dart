@@ -1,8 +1,9 @@
+import 'package:census/classes/gestore_memoria_locale.dart';
 import 'package:census/classes/modello.dart';
 import 'package:census/classes/sondaggio.dart';
-import 'package:census/pages/privacy_policy.dart';
 import 'package:census/pages/summary.dart';
 import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class SurveyPage extends StatefulWidget {
   final Sondaggio sondaggio;
@@ -16,14 +17,17 @@ class SurveyPage extends StatefulWidget {
 }
 
 class _SurveyPageState extends State<SurveyPage> {
+  final GestoreMemoriaLocale _service = GestoreMemoriaLocale();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late Risposta? _risposta;
   late int _indiceDomanda;
+  late bool _policyAccettata;
 
   @override
   void initState() {
     super.initState();
     _indiceDomanda = widget.indiceDomanda - 1;
+    _policyAccettata = widget.sondaggio.isInformativaAccettata();
   }
 
   @override
@@ -39,11 +43,11 @@ class _SurveyPageState extends State<SurveyPage> {
   }
 
   Widget _buildPage() {
-    _risposta = widget.sondaggio.risposteSelezionate[_indiceDomanda].risposta;
     if (_indiceDomanda == -1) {
-      return PrivacyPolicy();
+      return _privacyPolicyView();
     }
     Domanda domanda = widget.sondaggio.modello.domande[_indiceDomanda];
+    _risposta = widget.sondaggio.risposteSelezionate[_indiceDomanda].risposta;
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -169,6 +173,42 @@ class _SurveyPageState extends State<SurveyPage> {
             ],
           ),
         ),
+      ],
+    );
+  }
+
+  Widget _privacyPolicyView() {
+    return Stack(
+      fit: StackFit.expand,
+      alignment: AlignmentDirectional.centerStart,
+      children: [
+        SafeArea(child: SfPdfViewer.file(_service.prelevaPathInformativa())),
+        /*Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CheckboxListTile(
+              value: _policyAccettata,
+              onChanged: (value) {
+                setState(() {
+                  if (value == true) {
+                    widget.sondaggio.accettaInformativa();
+                  }
+                });
+              },
+              title: const Text(
+                  "Dichiaro di aver letto e compreso i termini presentati"),
+            ),
+            ElevatedButton(
+              child: const Text("Prosegui"),
+              onPressed: _policyAccettata
+                  ? () {
+                      _indiceDomanda++;
+                    }
+                  : null,
+            ),
+          ],
+        )*/
       ],
     );
   }
