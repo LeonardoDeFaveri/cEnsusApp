@@ -130,10 +130,11 @@ class _SurveyPageState extends State<SurveyPage> {
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => SummaryPage(widget.sondaggio),
+                            builder: (context) =>
+                                SummaryPage(widget.sondaggio, _indiceDomanda),
                           ),
                         );
                       },
@@ -148,14 +149,7 @@ class _SurveyPageState extends State<SurveyPage> {
                 children: [
                   IconButton(
                     icon: const Icon(Icons.arrow_forward_outlined),
-                    onPressed: (_indiceDomanda !=
-                            widget.sondaggio.risposteSelezionate.length - 1)
-                        ? () {
-                            setState(() {
-                              _indiceDomanda++;
-                            });
-                          }
-                        : null,
+                    onPressed: _goNext(),
                   ),
                   const Text(
                     "Domanda successiva",
@@ -240,5 +234,25 @@ class _SurveyPageState extends State<SurveyPage> {
       }
     }
     return numeroRisposteDate == widget.sondaggio.risposteSelezionate.length;
+  }
+
+  dynamic _goNext() {
+    if (_indiceDomanda != widget.sondaggio.risposteSelezionate.length - 1) {
+      return () {
+        setState(() {
+          _indiceDomanda++;
+        });
+      };
+    } else if (_isCompletato()) {
+      return () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SummaryPage(widget.sondaggio, _indiceDomanda),
+          ),
+        );
+      };
+    }
+    return null;
   }
 }
