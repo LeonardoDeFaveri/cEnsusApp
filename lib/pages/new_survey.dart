@@ -178,40 +178,56 @@ class _SurveyPageState extends State<SurveyPage> {
   }
 
   Widget _privacyPolicyView() {
-    return Stack(
-      fit: StackFit.expand,
-      alignment: AlignmentDirectional.centerStart,
+    return Column(
       children: [
-        PdfViewer.openAsset(_service.pathInformativa),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CheckboxListTile(
-              value: _policyAccettata,
-              onChanged: (value) {
-                setState(() {
-                  if (value == true) {
-                    widget.sondaggio.accettaInformativa();
-                    _policyAccettata = true;
-                  } else {
-                    _policyAccettata = false;
-                  }
-                });
-              },
-              title: const Text(
-                  "Dichiaro di aver letto e compreso i termini presentati"),
-            ),
-            ElevatedButton(
-              child: const Text("Prosegui"),
-              onPressed: _policyAccettata
-                  ? () {
-                      _indiceDomanda++;
-                    }
-                  : null,
-            ),
-          ],
-        )
+        Expanded(
+          child: PdfViewer.openAsset(_service.pathInformativa),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Flexible(
+                flex: 4,
+                child: CheckboxListTile(
+                  value: _policyAccettata,
+                  tristate: false,
+                  onChanged: (value) {
+                    setState(() {
+                      if (value == true) {
+                        widget.sondaggio.accettaInformativa();
+                        _policyAccettata = true;
+                      } else {
+                        _policyAccettata = false;
+                      }
+                    });
+                  },
+                  title: const Text(
+                      "Dichiaro di aver letto e compreso i termini presentati"),
+                  controlAffinity: ListTileControlAffinity.leading,
+                ),
+              ),
+              Flexible(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 16.0),
+                  child: ElevatedButton(
+                    child: const Text("Prosegui"),
+                    onPressed: _policyAccettata
+                        ? () {
+                            setState(() {
+                              _indiceDomanda++;
+                            });
+                          }
+                        : null,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }
