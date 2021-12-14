@@ -6,11 +6,13 @@ import 'package:flutter/material.dart';
 
 class ModelsPage extends StatelessWidget {
   final _service = GestoreMemoriaLocale();
+  final _textFieldController = TextEditingController();
 
   ModelsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    String descrizione = "";
     return Scaffold(
       appBar: AppBar(
         title: const Text("Scelta modello"),
@@ -34,12 +36,45 @@ class ModelsPage extends StatelessWidget {
                 return ListTile(
                   title: Text(modelli[index].nome),
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            SurveyPage(Sondaggio.newSurvey(modelli[index]), 0),
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text(
+                            "Indica una descrizione per il sondaggio"),
+                        content: TextField(
+                          controller: _textFieldController,
+                          decoration:
+                              const InputDecoration(hintText: "Descrizione"),
+                          onChanged: (value) {
+                            descrizione = value;
+                          },
+                        ),
+                        actions: [
+                          ElevatedButton(
+                            child: const Text("Annulla"),
+                            onPressed: () {
+                              descrizione = "";
+                              Navigator.pop(context);
+                            },
+                          ),
+                          ElevatedButton(
+                            child: const Text("Conferma"),
+                            onPressed: () {
+                              final sondaggio =
+                                  Sondaggio.newSurvey(modelli[index]);
+                              sondaggio.descrizione = descrizione;
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SurveyPage(
+                                      Sondaggio.newSurvey(modelli[index]), 0),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
                       ),
+                      barrierDismissible: false,
                     );
                   },
                 );

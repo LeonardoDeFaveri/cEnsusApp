@@ -7,6 +7,7 @@ import 'package:census/classes/utente.dart';
 import 'package:census/classes/util.dart';
 import 'package:excel/excel.dart';
 import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 
 class GestoreMemoriaLocale {
   final String _pathCredenziali = "data/credenziali.json";
@@ -14,6 +15,8 @@ class GestoreMemoriaLocale {
   final String _pathBozze = 'data/bozze/';
   final String _pathModelli = 'data/modelli/';
   final String _pathInformativa = 'data/informativa/privacy.pdf';
+
+  String get pathInformativa => _pathInformativa;
 
   Future<Utente> prelevaCredenziali() async {
     final String credentials = await rootBundle.loadString(_pathCredenziali);
@@ -85,6 +88,33 @@ class GestoreMemoriaLocale {
     return modelli;
   }
 
+  void salvaSondaggio(Sondaggio sondaggio) async {
+    final excel = Excel.createExcel();
+    const sheet = "sheet1";
+    final header = List.empty(growable: true);
+    header.add("Modello");
+    header.add(sondaggio.modello.id);
+    header.add(sondaggio.modello.nome);
+    header.add(sondaggio.descrizione);
+    header.add(DateTime.now().millisecondsSinceEpoch);
+    header.add(true);
+    header.add(true);
+    excel.appendRow(sheet, header);
+
+    for (var domandaRisposta in sondaggio.risposteSelezionate) {
+      final row = List.empty(growable: true);
+      row.add(domandaRisposta.domanda.testo);
+      row.add(domandaRisposta.risposta?.testo);
+      for (var risposta in domandaRisposta.domanda.risposte) {
+        row.add(risposta.testo);
+      }
+      excel.appendRow(sheet, row);
+    }
+    final path = await _localPath;
+
+    return;
+  }
+
   Future<Excel> _openExcel(String path) async {
     ByteData data = await rootBundle.load(path);
     var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
@@ -92,5 +122,9 @@ class GestoreMemoriaLocale {
     return excel;
   }
 
-  String get pathInformativa => _pathInformativa;
+  Future<String> get _localPath async {
+    Directory appDocDir = await getApplicationDocumentsDirectory();
+    String appDocPath = appDocDir.path;
+    return appDocPath;
+  }
 }

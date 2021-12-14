@@ -158,7 +158,29 @@ class _SurveyPageState extends State<SurveyPage> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (_) => AlertDialog(
+                            title: const Text(
+                              "Sicuro di voler salvare il sondaggio corrente tra le bozze?",
+                            ),
+                            actions: [
+                              ElevatedButton(
+                                child: const Text("Annulla"),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              ElevatedButton(
+                                child: const Text("Conferma"),
+                                onPressed: () {},
+                              ),
+                            ],
+                          ),
+                          barrierDismissible: false,
+                        );
+                      },
                       child: const Text("Salva come bozza"),
                     ),
                   )

@@ -1,12 +1,14 @@
+import 'package:census/classes/gestore_memoria_locale.dart';
 import 'package:census/classes/sondaggio.dart';
 import 'package:census/pages/new_survey.dart';
 import 'package:flutter/material.dart';
 
 class SummaryPage extends StatelessWidget {
+  final _service = GestoreMemoriaLocale();
   final Sondaggio sondaggio;
   final int indiceChiamante;
 
-  const SummaryPage(this.sondaggio, this.indiceChiamante, {Key? key})
+  SummaryPage(this.sondaggio, this.indiceChiamante, {Key? key})
       : super(key: key);
 
   @override
@@ -77,11 +79,59 @@ class SummaryPage extends StatelessWidget {
                     child: const Text("Indietro"),
                   ),
                   ElevatedButton(
-                    onPressed: () => {},
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (_) => AlertDialog(
+                          title: const Text(
+                            "Sicuro di voler salvare il sondaggio corrente tra le bozze?",
+                          ),
+                          actions: [
+                            ElevatedButton(
+                              child: const Text("Annulla"),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                            ElevatedButton(
+                              child: const Text("Conferma"),
+                              onPressed: () {},
+                            ),
+                          ],
+                        ),
+                        barrierDismissible: false,
+                      );
+                    },
                     child: const Text("Salva Bozza"),
                   ),
                   ElevatedButton(
-                    onPressed: sondaggio.isCompletato() ? () {} : null,
+                    onPressed: sondaggio.isCompletato()
+                        ? () {
+                            showDialog(
+                              context: context,
+                              builder: (_) => AlertDialog(
+                                title: const Text(
+                                  "Sicuro di voler terminare il sondaggio corrente?",
+                                ),
+                                actions: [
+                                  ElevatedButton(
+                                    child: const Text("Annulla"),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                  ElevatedButton(
+                                    child: const Text("Conferma"),
+                                    onPressed: () {
+                                      _service.salvaSondaggio(sondaggio);
+                                    },
+                                  ),
+                                ],
+                              ),
+                              barrierDismissible: false,
+                            );
+                          }
+                        : null,
                     child: const Text("Conferma"),
                   ),
                 ],
