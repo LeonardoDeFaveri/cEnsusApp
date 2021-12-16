@@ -9,6 +9,9 @@ class Modello extends Equatable {
 
   Modello(this.id, this.nome, this.domande);
 
+  /// costruttore di Modello da un file exel
+  /// 
+  /// riceve un'istanza di un file exel e costruisce a partire di essa un'istanza di Modello
   Modello.fromExcel(Excel excel) {
     final Sheet? sheet = excel.tables["Sheet1"];
     if (sheet == null) {

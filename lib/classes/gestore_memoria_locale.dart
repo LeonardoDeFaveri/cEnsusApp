@@ -16,14 +16,17 @@ class GestoreMemoriaLocale {
   final String _pathModelli = 'data/modelli/';
   final String _pathInformativa = 'data/informativa/privacy.pdf';
 
+  /// ottiene il percorso dell'informativa sulla privacy salvata in memoria
   String get pathInformativa => _pathInformativa;
 
+  /// legge le credenziali dell'utente, salvate in memoria come JSON e le restituisce
   Future<Utente> prelevaCredenziali() async {
     final String credentials = await rootBundle.loadString(_pathCredenziali);
     final json = jsonDecode(credentials);
     return Utente.fromJson(json);
   }
 
+  /// riceve un'istanza di utente che contiene le relative credenziali e le salva in memoria come documento JSON
   Future<void> salvaCredenziali(Utente utente) async {
     final json = utente.toJson();
     final credentials = jsonEncode(json);
@@ -31,6 +34,7 @@ class GestoreMemoriaLocale {
     file.writeAsString(credentials);
   }
 
+  /// estrae dalla memoria tutti i sondaggi completati e li restituisce come lista di sondaggi
   Future<List<Sondaggio>> prelevaSondaggi() async {
     final List<Sondaggio> sondaggi = List<Sondaggio>.empty(growable: true);
     final manifestJson = await rootBundle.loadString('AssetManifest.json');
@@ -50,6 +54,7 @@ class GestoreMemoriaLocale {
     return sondaggi;
   }
 
+  /// preleva dalla memria tutte le bozze salvate e le restituisce come una lista di sondaggi
   Future<List<Sondaggio>> prelevaBozze() async {
     final List<Sondaggio> bozze = List<Sondaggio>.empty(growable: true);
     final manifestJson = await rootBundle.loadString('AssetManifest.json');
@@ -69,6 +74,7 @@ class GestoreMemoriaLocale {
     return bozze;
   }
 
+  /// preleva i modelli dei sondaggi dalla memoria e li restituisce come lista di modelli
   Future<List<Modello>> prelevaModelli() async {
     final List<Modello> modelli = List<Modello>.empty(growable: true);
     final manifestJson = await rootBundle.loadString('AssetManifest.json');
@@ -88,6 +94,7 @@ class GestoreMemoriaLocale {
     return modelli;
   }
 
+  /// riceve come parametro un'istanza di sondaggio per salvarla come file exel
   void salvaSondaggio(Sondaggio sondaggio) async {
     final excel = Excel.createExcel();
     const sheet = "sheet1";
@@ -117,6 +124,7 @@ class GestoreMemoriaLocale {
     return;
   }
 
+  /// riceve il path di un file exel, legge il file e restituisce un'istanza di esso
   Future<Excel> _openExcel(String path) async {
     ByteData data = await rootBundle.load(path);
     var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
