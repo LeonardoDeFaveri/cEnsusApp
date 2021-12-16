@@ -1,8 +1,9 @@
 import 'package:census/classes/modello.dart';
 import 'package:census/classes/util.dart';
+import 'package:equatable/equatable.dart';
 import 'package:excel/excel.dart';
 
-class Sondaggio {
+class Sondaggio extends Equatable {
   late Modello modello;
   late bool _completato;
   late bool _informativaPrivacyAccettata;
@@ -11,7 +12,7 @@ class Sondaggio {
   late String descrizione;
 
   Sondaggio(this.modello, this._completato, this._informativaPrivacyAccettata,
-      this.risposteSelezionate, this.descrizione);
+      this.risposteSelezionate, this.descrizione, this.dataOra);
 
   Sondaggio.newSurvey(this.modello) {
     _completato = false;
@@ -95,9 +96,19 @@ class Sondaggio {
   void setDataOra(DateTime dataOra) {
     this.dataOra = dataOra;
   }
+
+  @override
+  List<Object?> get props => [
+        modello,
+        _completato,
+        _informativaPrivacyAccettata,
+        risposteSelezionate,
+        descrizione,
+        dataOra,
+      ];
 }
 
-class RispostaSelezionata {
+class RispostaSelezionata extends Equatable {
   Domanda domanda;
   Risposta? risposta;
 
@@ -110,4 +121,7 @@ class RispostaSelezionata {
   void deseleziona() {
     risposta = null;
   }
+
+  @override
+  List<Object?> get props => [domanda, risposta];
 }

@@ -2,7 +2,7 @@ import 'package:census/classes/util.dart';
 import 'package:equatable/equatable.dart';
 import 'package:excel/excel.dart';
 
-class Modello {
+class Modello extends Equatable {
   late int id;
   late String nome;
   late List<Domanda> domande;
@@ -30,6 +30,9 @@ class Modello {
       domande.add(Domanda(testoDomanda, risposte));
     }
   }
+
+  @override
+  List<Object?> get props => [id, nome, domande];
 }
 
 class Domanda extends Equatable {
