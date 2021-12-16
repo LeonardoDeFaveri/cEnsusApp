@@ -80,6 +80,7 @@ class Sondaggio {
 
   bool isInformativaAccettata() => _informativaPrivacyAccettata;
 
+  /// seleziona la risposta sccelta dell'utente
   bool seleziona(Domanda domanda, Risposta risposta) {
     int index = modello.domande.indexOf(domanda);
     if (index == -1) {
