@@ -1,17 +1,16 @@
-# census
+# cEnsus
 
-A new Flutter project.
+Il codice che si trova in questa repository implementa un applicazione mobile per la gestione di sondaggi comunali.
+Nello specifico sono state implementate le seguenti funzionalità:
+- compliazione di un sondaggio
+- salvataggio di un sondaggio come bozza
+- compilazione di una bozza, ovvero la ripresa della compilazione di un sondaggio sospeso
 
-## Getting Started
+Per testare l'applicazione è possibile intsallarla in un dispositivo mobile, il simulatore del framework,  
+opprure il simulatore via browser Google Chrome (Il browser predefinito per il testing è Chrome, se si desidera utilizzarne altri è necessario configurare il framework).
 
-This project is a starting point for a Flutter application.
+Il framework utilizzato è Flutter; l'applicazione è scritta in linguaggio dart.
 
-A few resources to get you started if this is your first Flutter project:
+Per eseguire l'applicaizione dal simulatore via Browser è necessario aprire il terminale nella cartella cEnsusApp/ ed eseguire il comando 'flutter run'; una volta eseguito il comando (attendere anche qualche secondo) si aprirà Chrome che permetterà di usare l'app.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-# cEnsusApp
+Per eseguire il codice di testing, usare il comando 'flutter test'.
