@@ -24,6 +24,9 @@ class Sondaggio extends Equatable {
     descrizione = "";
   }
 
+  /// crea un'istanza di un sondaggio partendo da un file excel
+  /// 
+  /// riceve come parametro [excel], una rappresentazione del file excel da cui estrarre i dati per la creazione dell'istanza di Sondaggio
   Sondaggio.fromExcel(Excel excel) {
     final Sheet? sheet = excel.tables["Sheet1"];
     if (sheet == null) {
@@ -93,7 +96,7 @@ class Sondaggio extends Equatable {
     risposteSelezionate[index].seleziona(risposta);
     return true;
   }
-
+  ///imposta la data e l'ora di compilazione del sondaggio
   void setDataOra(DateTime dataOra) {
     this.dataOra = dataOra;
   }
