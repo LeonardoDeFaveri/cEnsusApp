@@ -21,11 +21,12 @@ Digitare quindi i seguenti comandi, dalla cartella:
 - dart pub global activate dartdoc
 - export PATH="$PATH":"$HOME/.pub-cache/bin"
 - dart pub global activate dhttpd
+
 I predecenti comandi sono per la configurazione, il seguente è il comando per attivare il server http:
 - dhttpd --path doc/api
 
 Digitare il comando 'dartdoc' per generare la documentazione.
 Per visualizzare la documentazione, una volta attivato il server, andare all'indirizzo 'localhost:8080' dal proprio browser.
 
-È possibile tuttavia accedere al file della documentazione, senza necessariamente attivare il server; il file si trova al percorso cEnsusApp/doc/api/index.html
+È possibile tuttavia accedere al file della documentazione, senza necessariamente attivare il server; il file si trova al percorso cEnsusApp/doc/api/index.html.
 Se si accede al file, senza usare il server, non è possible sfruttare la barra di ricerca della pagina.
